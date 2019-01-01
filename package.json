@@ -1,16 +1,16 @@
 {
-  "name": "highfat-ecs",
+  "name": "my-app",
   "version": "0.0.1",
-  "description": "ECS for LCHF",
+  "description": "Sample app to deploy to ECS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "repository": "bitbucket:merlin_cox/highfat-ecs",
+  "repository": "github:merlin_cox/aws-ecs-fargate-deployer",
   "keywords": [],
   "author": "Merlin Cox",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.16.4"
   },
