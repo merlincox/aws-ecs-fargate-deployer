@@ -36,7 +36,7 @@ HTTP to HTTPS, an environment for your app (in the supplied example git tag, bra
 * The AWS command line interface `aws` installed and suitably set up with credentials for your AWS account
 * `docker` installed
 * `git` installed
-* `jq` installed (`jq` is a very useful command-line tool for manipulating JSON. See https://stedolan.github.io/jq.
+* `jq` installed (`jq` is a very useful command-line tool for manipulating JSON. See https://stedolan.github.io/jq.)
 
 
  
