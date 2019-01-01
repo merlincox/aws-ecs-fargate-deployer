@@ -1,0 +1,18 @@
+{
+  "name": "highfat-ecs",
+  "version": "0.0.1",
+  "description": "ECS for LCHF",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": "bitbucket:merlin_cox/highfat-ecs",
+  "keywords": [],
+  "author": "Merlin Cox",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {}
+}

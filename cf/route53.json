@@ -1,0 +1,16 @@
+{
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "INSERT VALUE",
+        "Type": "A",
+        "AliasTarget": {
+          "HostedZoneId": "INSERT VALUE",
+          "DNSName": "INSERT VALUE",
+          "EvaluateTargetHealth": false
+        }
+      }
+    }
+  ]
+}
