@@ -1,4 +1,4 @@
-## aws-esc-fargate-deployer
+## aws-ecs-fargate-deployer
 
 This repo contains a Bash deploy script and Cloud Formation templates for deploying a Docker image to AWS ECS (Elastic 
 Container Service) using Fargate deployment.
