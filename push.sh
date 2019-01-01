@@ -2,13 +2,12 @@
 
 usage()
 {
-    echo "Usage: $(basename $0) -d <domain> -s <subdomain_base> -a <app_name> [ -p <platform> ] [ -r <region> ] [ -c <cert_domain> ]" >&2
+    echo "Usage: $(basename $0) -d <domain> -s <subdomain_base> -a <app_name> [ -p <platform> ] [ -c <cert_domain> ]" >&2
     echo "   where <domain> is a domain for which there is Route53 hosted zone;" >&2
     echo "   where <app_name> is an arbitrary application name used for naming resources;" >&2
     echo "   where <subdomain_base> and <platform> {default 'test') are used together to generate a subdomain name" >&2
     echo "     of the form <subdomain_base>-<platform> unless <platform> is 'live'" >&2
     echo "     in which case the subdomain will match <subdomain_base> exactly;" >&2
-    echo "   where <region> is an AWS region (defaults to region in default profile);" >&2
     echo "   where <cert_domain> (default '*.domain') must match a certificate in Certificate Manager;" >&2
 }
 
@@ -42,9 +41,6 @@ while getopts ":d:s:a:p:r:c:" opt; do
         p)
             platform=${OPTARG}
             ;;
-        r)
-            region=${OPTARG}
-            ;;
         c)
             cert_domain="${OPTARG}"
             ;;
@@ -58,10 +54,6 @@ done
 if [[ -z "${domain}" ]] || [[ -z "${subdomain_base}" ]] || [[ -z "${ecs_app_name}" ]]; then
     usage
     exit 1
-fi
-
-if [[ -z "${region}" ]]; then
-    region=$(aws configure get default.region)
 fi
 
 if [[ -z "${platform}" ]]; then
@@ -118,7 +110,7 @@ ecs_cluster=${ecs_app_name}-${subdomain}-cluster
 ecs_platform_balancer=${ecs_app_name}-${subdomain}-balancer
 ecs_platform_service=${ecs_app_name}-${subdomain}-service
 
-ecr_login=$(aws ecr get-login --no-include-email --region ${region})
+ecr_login=$(aws ecr get-login --no-include-email)
 
 if ecr_repo=$(aws ecr describe-repositories --repository-names ${ecs_app_name} | jq -r ".repositories[0].repositoryUri") 2>/dev/null; then
     echo "ECR repo ${ecs_app_name} found"
@@ -177,3 +169,4 @@ fi
 r53_change=$(cat "${route53_json}" | jq ".Changes[0].ResourceRecordSet.Name = \"${subdomain}.${domain}\" | .Changes[0].ResourceRecordSet.AliasTarget.DNSName = \"${balancer_dns_name}\" | .Changes[0].ResourceRecordSet.AliasTarget.HostedZoneId = \"${balancer_zone_id}\"")
 
 aws route53 change-resource-record-sets --hosted-zone-id ${domain_zone_id} --change-batch "${r53_change}"
+
