@@ -8,7 +8,6 @@ usage()
     echo "   where <subdomain_base> and <platform> {default 'test') are used together to generate a subdomain name" >&2
     echo "     of the form <subdomain_base>-<platform> unless <platform> is 'live'" >&2
     echo "     in which case the subdomain will match <subdomain_base> exactly;" >&2
-    echo "   where <cert_domain> (default '*.domain') must match a certificate in Certificate Manager;" >&2
 }
 
 cd "$(dirname "$0")"
@@ -27,7 +26,7 @@ if [[ ! -z "$(git status --porcelain)" ]]; then
     exit 1
 fi
 
-while getopts ":d:s:a:p:r:c:" opt; do
+while getopts ":d:s:a:p:r:" opt; do
     case "${opt}" in
         d)
             domain=${OPTARG}
@@ -40,9 +39,6 @@ while getopts ":d:s:a:p:r:c:" opt; do
             ;;
         p)
             platform=${OPTARG}
-            ;;
-        c)
-            cert_domain="${OPTARG}"
             ;;
         *)
             usage
@@ -60,8 +56,12 @@ if [[ -z "${platform}" ]]; then
     platform=test
 fi
 
-if [[ -z "$cert_domain" ]]; then
-   cert_domain="*.${domain}"
+platform_regex="^(test|stage|live)$"
+
+if [[ ! "${platform}" =~ $platform_regex ]]
+then
+    echo "Platform must live, test or stage"
+    exit 1
 fi
 
 if [[ "${platform}" != "live" ]]; then
@@ -88,11 +88,17 @@ if [[ -z "${domain_zone_id}" ]]; then
     exit 1
 fi
 
-certificate_arn=$(aws acm list-certificates | jq -r ".CertificateSummaryList[] | select(.DomainName == \"${cert_domain}\") | .CertificateArn")
+custom_domain="${subdomain}.${domain}"
+
+certificate_arn=$(aws acm list-certificates | jq -r ".CertificateSummaryList[] | select(.DomainName == \"${custom_domain}\") | .CertificateArn")
 
 if [[ -z "${certificate_arn}" ]]; then
-    echo "No SSL certificate was found for ${cert_domain} domain pattern" >&2
-    exit 1
+    certificate_arn=$(aws acm list-certificates | jq -r ".CertificateSummaryList[] | select(.DomainName == \"*.${domain}\") | .CertificateArn")
+
+    if [[ -z "${certificate_arn}" ]]; then
+        echo "No SSL certificate was found for ${custom_domain} or *.${domain} patterns" >&2
+        exit 1
+    fi
 fi
 
 cluster_yml=cf/cluster.yml
@@ -105,6 +111,40 @@ for file in ${cluster_yml} ${service_yml} ${route53_json}; do
         exit 1
     fi
 done
+
+tag_pattern="^v[0-9]+\.[0-9]+\.[0-9]+$"
+if [[ $platform == live ]] ; then
+
+    if [[ "${git_branch}" != "master" ]]; then
+
+       echo "Live deployments must be on the master branch" >&2
+       exit 1
+    fi
+
+    git fetch
+    git_diff=$(git diff origin/master)
+
+    if [[ ! -z "${git_diff}" ]]; then
+        echo "Live deployments must be in sync with origin/master" >&2
+        exit 1
+    fi
+
+    if [[ ! "${git_tag}" =~ ${tag_pattern} ]] ; then
+
+        echo "Live deployments must be tagged with vN.N.N: ${git_tag} does not match" >&2
+        exit 1
+    fi
+
+    read -p "About to deploy ${git_tag} to live. Confirm? :" -n 1 -r reply
+    echo
+    case "$reply" in
+        y|Y ) echo "Proceeding with deployment";;
+        * )   echo "Cancelling deployment" >&2
+              exit 1
+              ;;
+    esac
+fi
+
 
 ecs_cluster=${ecs_app_name}-${subdomain}-cluster
 ecs_platform_balancer=${ecs_app_name}-${subdomain}-balancer
@@ -166,7 +206,7 @@ if [[ ! -z "${existing_r53}" ]]; then
     exit 0
 fi
 
-r53_change=$(cat "${route53_json}" | jq ".Changes[0].ResourceRecordSet.Name = \"${subdomain}.${domain}\" | .Changes[0].ResourceRecordSet.AliasTarget.DNSName = \"${balancer_dns_name}\" | .Changes[0].ResourceRecordSet.AliasTarget.HostedZoneId = \"${balancer_zone_id}\"")
+r53_change=$(cat "${route53_json}" | jq ".Changes[0].ResourceRecordSet.Name = \"${custom_domain}\" | .Changes[0].ResourceRecordSet.AliasTarget.DNSName = \"${balancer_dns_name}\" | .Changes[0].ResourceRecordSet.AliasTarget.HostedZoneId = \"${balancer_zone_id}\"")
 
 aws route53 change-resource-record-sets --hosted-zone-id ${domain_zone_id} --change-batch "${r53_change}"
 
