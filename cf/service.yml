@@ -111,7 +111,7 @@ Resources:
               Value: !Ref 'GitCommit'
             - Name: RELEASE
               Value: !Ref 'GitTag'
-            - Name: PORT
+            - Name: ECS_PORT
               Value: !Ref 'ContainerPort'
             - Name: PLATFORM
               Value: !Ref 'Platform'
