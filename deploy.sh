@@ -2,5 +2,5 @@
 
 cd "$(dirname "$0")"
 
-./push.sh -a merlincox-uk -d merlincox.uk -s ssr-spa-ecs -p live
+./push.sh -a ssr-spa -d merlincox.uk -s ssr -p live
 
