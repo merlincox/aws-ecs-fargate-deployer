@@ -105,15 +105,15 @@ Resources:
               'awslogs-group': !Ref 'ServiceLogGroup'
               'awslogs-stream-prefix': !Ref 'ServiceName'
           Environment:
-            - Name: BRANCH
+            - Name: ECS_BRANCH
               Value: !Ref 'GitBranch'
-            - Name: COMMIT
+            - Name: ECS_COMMIT
               Value: !Ref 'GitCommit'
-            - Name: RELEASE
+            - Name: ECS_RELEASE
               Value: !Ref 'GitTag'
             - Name: ECS_PORT
               Value: !Ref 'ContainerPort'
-            - Name: PLATFORM
+            - Name: ECS_PLATFORM
               Value: !Ref 'Platform'
   # The service. The service is a resource which allows you to run multiple
   # copies of a type of task, and gather up their logs and metrics, as well
