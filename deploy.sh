@@ -2,5 +2,5 @@
 
 cd "$(dirname "$0")"
 
-./push.sh -a my-app -d mydomain.com -s mysubdomain -p live
+./push.sh -a merlincox-uk -d merlincox.uk -s ssr-spa-ecs -p live
 

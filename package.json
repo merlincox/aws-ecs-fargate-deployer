@@ -1,18 +1,30 @@
 {
-  "name": "my-app",
-  "version": "0.0.1",
-  "description": "Sample app to deploy to ECS",
+  "name": "aws-ecs-fargate-deployer",
+  "version": "0.1.0",
+  "description": "Super simple React SSR SPA app to deploy to ECS Fargate",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "build": "webpack --mode production",
+    "build-dev": "webpack --mode development"
   },
   "repository": "github:merlin_cox/aws-ecs-fargate-deployer",
   "keywords": [],
   "author": "Merlin Cox",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "react-router-dom": "^4.3.1",
+    "js-htmlencode": "^0.3.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.2.1"
+  }
 }

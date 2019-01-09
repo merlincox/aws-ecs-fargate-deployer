@@ -2,7 +2,9 @@ FROM node:8-alpine
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . .
-RUN npm install
+RUN npm install && \
+    npm run build && \
+    cp -f public/* dist
 EXPOSE 3000
-CMD [ "node", "server.js" ]
+CMD [ "node", "run.js" ]
 

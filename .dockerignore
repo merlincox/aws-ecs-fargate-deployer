@@ -1,10 +1,10 @@
 .git
 .gitignore
-node_modules
-Dockerfile
 .idea
 
-local.sh
-deploy.sh
-push.sh
+node_modules
 cf
+dist
+Dockerfile
+
+*.sh
