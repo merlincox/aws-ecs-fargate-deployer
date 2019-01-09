@@ -145,10 +145,16 @@ if [[ $platform == live ]] ; then
     esac
 fi
 
-
 ecs_cluster=${ecs_app_name}-${subdomain}-cluster
 ecs_platform_balancer=${ecs_app_name}-${subdomain}-balancer
 ecs_platform_service=${ecs_app_name}-${subdomain}-service
+cf_cluster_stack=${ecs_app_name}-${subdomain}-c
+cf_service_stack=${ecs_app_name}-${subdomain}-s
+
+if [[ ${#cf_cluster_stack} -gt 20 ]]; then
+    echo  "Computed stack name ${cf_cluster_stack} is too long at ${#cf_cluster_stack} chars. Maximum 20" >&2
+    exit 1
+fi
 
 ecr_login=$(aws ecr get-login --no-include-email)
 
@@ -173,9 +179,6 @@ else
     docker build -t ${image_uri} .
     docker push ${image_uri}
 fi
-
-cf_cluster_stack=${ecs_app_name}-cluster-${subdomain}
-cf_service_stack=${ecs_app_name}-service-${subdomain}
 
 aws cloudformation deploy \
        --stack-name ${cf_cluster_stack} \
