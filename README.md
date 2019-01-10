@@ -3,6 +3,10 @@
 This repo contains a Bash deploy script and CloudFormation templates for deploying a Docker image to AWS ECS (Elastic 
 Container Service) using the serverless Fargate launch type.
 
+The application which is deployed is a example React service side rendered (SSR) single page app (SPA).
+
+### AWS deployment
+
 The CloudFormation templates are adapted from the [AWS Labs ECS templates](https://github.com/awslabs/aws-cloudformation-templates/tree/master/aws/services/ECS).
 
 Natively the templates already accomplish these tasks:
@@ -29,7 +33,17 @@ below, the deployment script enables you to deploy it to `https://{your-sub-doma
 HTTP to HTTPS, an environment for your app (in the supplied example git tag, branch, and commit information and a 
 'platform' variable) and CloudWatch logging for your app.
 
-### Prerequsisites
+### The application
+
+The application is a simple React/Express single-page application which demonstrates server-side rendering.
+
+It also demonstrates a method of passing the ECS execution environment to React code running in the client.
+
+The application can be run locally using `local-dev.sh` (requires `node`, `npm install`, `npm run build-dev`).
+
+It can also be run in a local docker container using `docker.sh`.
+
+### Prerequsisites for the deployment
 
 * A domain with a hosted-zone record in AWS Route 53
 * A SSL certificate for that domain in the AWS Certificate Manager
@@ -38,5 +52,8 @@ HTTP to HTTPS, an environment for your app (in the supplied example git tag, bra
 * `git` installed
 * `jq` installed (`jq` is a very useful command-line tool for manipulating JSON. See https://stedolan.github.io/jq.)
 
+## Additional prerequisites for running the application locally
+
+*`node` installed
 
  
