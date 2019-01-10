@@ -2,7 +2,7 @@
 
 usage()
 {
-    echo "Usage: $(basename $0) -d <domain> -s <subdomain_base> -a <app_name> [ -p <platform> ] [ -c <cert_domain> ]" >&2
+    echo "Usage: $(basename $0) -d <domain> -s <subdomain_base> -a <app_name> [ -p <platform> ]" >&2
     echo "   where <domain> is a domain for which there is Route53 hosted zone;" >&2
     echo "   where <app_name> is an arbitrary application name used for naming resources;" >&2
     echo "   where <subdomain_base> and <platform> {default 'test') are used together to generate a subdomain name" >&2
@@ -148,6 +148,7 @@ fi
 ecs_cluster=${ecs_app_name}-${subdomain}-cluster
 ecs_platform_balancer=${ecs_app_name}-${subdomain}-balancer
 ecs_platform_service=${ecs_app_name}-${subdomain}-service
+
 cf_cluster_stack=${ecs_app_name}-${subdomain}-c
 cf_service_stack=${ecs_app_name}-${subdomain}-s
 
