@@ -1,26 +1,30 @@
-import React, {Component} from "react";
+import React from "react";
+import PropTypes from 'prop-types';
 
-class About extends Component {
+const capitalise = source => `${source.substring(0,1).toUpperCase()}${source.substring(1)}`;
 
-    render() {
+const About = (props) => {
 
-        const environment = this.props.environment || {};
+    const environment = props.environment || {};
 
-        const ps = Object.keys(environment).sort().map((key, index) => (
-            <p key={index}>{`${key.substring(0, 1).toUpperCase()}${key.substring(1)}: ${environment[key]}`}</p>)
-        );
+    const lines = Object.keys(environment).sort().map((key, index) => (
+        <p key={index}>{`${capitalise(key)}: ${environment[key]}`}</p>)
+    );
 
-        if (ps.length === 0) {
-            ps.push(<p key="0">{`No environment was found to display`}</p>)
-        }
-
-        return (
-            <div>
-                <h2>About</h2>
-                {ps}
-            </div>
-        );
+    if (lines.length === 0) {
+        lines.push(<p key="0">{`No environment was found to display`}</p>)
     }
-}
+
+    return (
+        <div>
+            <h2>About</h2>
+            {lines}
+        </div>
+    );
+};
+
+About.propTypes = {
+    environment: PropTypes.object,
+};
 
 export default About;
