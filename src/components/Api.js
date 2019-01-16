@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import Calculator from "./Calculator";
 
+const apiDomain = 'api-test.merlincox.uk';
+
 class Api extends Component {
 
     constructor(props) {
@@ -12,8 +14,8 @@ class Api extends Component {
 
         this.state = {
             result: '0',
-            val1: 0,
-            val2: 0,
+            value_1: 0,
+            value_2: 0,
             op: 'add',
         };
     }
@@ -29,7 +31,7 @@ class Api extends Component {
 
         e.preventDefault();
 
-        const url = `https://api-test.merlincox.uk/calc/${this.state.op}?val1=${this.state.val1}&val2=${this.state.val2}`;
+        const url = `https://${apiDomain}/calc/${this.state.op}?val1=${this.state.value_1}&val2=${this.state.value_2}`;
 
         console.log(`Calling ${url}`);
 
@@ -54,7 +56,7 @@ class Api extends Component {
         return (
             <div>
                 <h2>API</h2>
-                <p>Also demonstrating simple integration with AWS API Gateway.</p>
+                <p>Also demonstrating simple API integration using a serverless AWS API Gateway defined in this github repo:</p>
                 <p>See <a href="https://github.com/merlincox/aws-api-gateway-deploy"
                           target="_blank">https://github.com/merlincox/aws-api-gateway-deploy</a></p>
                 <Calculator onSubmit={this.handleSubmit}
@@ -62,8 +64,8 @@ class Api extends Component {
                             result={this.state.result}
                             ops={ops}
                             op={this.state.op}
-                            val1={this.state.val1}
-                            va12={this.state.val2}
+                            value_1={this.state.value_1}
+                            value_2={this.state.value_2}
                 />
             </div>
         );

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 const capitalise = source => `${source.substring(0,1).toUpperCase()}${source.substring(1)}`;
 
+
 const Calculator = (props) => {
 
     return (
@@ -17,12 +18,13 @@ const Calculator = (props) => {
             </label>
             <label>
                 Value 1:
-                <input type="number" step="any" name="val1" onChange={props.onChange} value={props.val1} />
+                <input type="number" step="any" name="value_1" onChange={props.onChange} value={props.value_1} />
             </label>
             <label>
                 Value 2:
-                <input type="number" step="any" name="val2" onChange={props.onChange} value={props.val2} />
+                <input type="number" step="any" name="value_2" onChange={props.onChange} value={props.value_2} />
             </label>
+
             <label>
                 Result:
                 <input type="text" readOnly name="result" value={props.result} />
@@ -33,11 +35,13 @@ const Calculator = (props) => {
 };
 
 Calculator.propTypes = {
-    val1: PropTypes.number,
-    val2: PropTypes.number,
+    value_1: PropTypes.number,
+    value_2: PropTypes.number,
     result: PropTypes.string,
     ops: PropTypes.array,
     op: PropTypes.string,
+    onChange: PropTypes.func,
+    onSubmit: PropTypes.func,
 };
 
 export default Calculator;
