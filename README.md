@@ -43,6 +43,8 @@ The application can be run locally using `local-dev.sh` (requires `node`, `npm i
 
 It can also be run in a local docker container using `docker.sh`.
 
+The app demonstrates simple API integration (currently hard-coded for api-test.merlincox.uk).
+
 ### Prerequsisites for the deployment
 
 * A domain with a hosted-zone record in AWS Route 53
