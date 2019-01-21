@@ -10,6 +10,11 @@ import Home from "./Home";
 import About from "./About";
 import Api from "./Api";
 import Page404 from "./Page404";
+import withWindowWidth from "./withWindowWidth";
+import Window from "./Window";
+
+
+const WindowHOC = withWindowWidth(Window);
 
 const Layout = (props) => (
     <div>
@@ -18,12 +23,14 @@ const Layout = (props) => (
             <li><NavLink exact to="/">Home</NavLink></li>
             <li><NavLink exact to="/api">API</NavLink></li>
             <li><NavLink exact to="/about">About</NavLink></li>
+            <li><NavLink exact to="/window">Window</NavLink></li>
         </ul>
         <div className="content">
             <Switch>
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/api" render={() => <Api environment={props.environment}/>}/>
                 <Route exact path="/about" render={() => <About environment={props.environment}/>}/>
+                <Route exact path="/window" render={() => <WindowHOC/> }/>
                 <Route render={() => <Page404/>}/>
             </Switch>
         </div>
